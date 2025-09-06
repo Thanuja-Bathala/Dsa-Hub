@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linked List Visualization</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #fafafa;
+      padding: 20px;
+    }
+        .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #d63384;
+    color: white;
+    padding: 10px 20px;
+}
+.navbar .logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+}
+.logo a{
+    text-decoration: none;
+    color: white;
+    
+}
+
+    h1 {
+      color: #333;
+    }
+    h2 {
+      color: #e60073;
+    }
+
+    /* Info box */
+    .info-box {
+      background: #ffe6f0;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
+    .info-box ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .info-box ul li {
+      margin: 6px 0;
+    }
+
+    /* Linked List structure */
+    .linked-list {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+    .list-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .node {
+      background: #f8f8f8;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      min-width: 60px;
+      transition: all 0.5s ease;
+      flex: 0 0 auto;
+    }
+    .node.active {
+      border-color: #e60073;
+      background: #ffe6f0;
+      transform: scale(1.1);
+    }
+    .arrow {
+      font-size: 18px;
+      flex: 0 0 auto;
+    }
+    .null {
+      color: #e60073;
+      font-weight: bold;
+    }
+
+    /* Button */
+    button {
+      padding: 10px 15px;
+      background: #e60073;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #cc005f;
+    }
+
+    /* Extra Sections */
+    .memory-layout, .complexity, .advantages, .code-section {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .memory-box {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .mem-cell {
+      background: #f9e6ff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1 1 120px;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 15px;
+    }
+
+    .complexity table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .complexity td {
+      padding: 6px;
+      border-bottom: 1px solid #eee;
+    }
+    .red { color: red; }
+    .green { color: green; }
+
+    pre {
+      background: #1e1e1e;
+      color: #cfcfcf;
+      padding: 15px;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+      font-size: 14px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .list-container {
+        justify-content: center;
+      }
+      .node {
+        min-width: 50px;
+        font-size: 14px;
+        padding: 10px;
+      }
+      .arrow {
+        font-size: 16px;
+      }
+      pre {
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 22px;
+      }
+      h2 {
+        font-size: 18px;
+      }
+      button {
+        width: 100%;
+      }
+      .mem-cell {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="navbar"></div>
+<script>
+  fetch("navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+</script>
+
+  <!-- Main content -->
+  <h1>Linked Lists</h1>
+  <h2>What is a Linked List?</h2>
+  <p>
+    A linked list is a linear data structure where elements are stored in nodes, 
+    and each node contains data and a reference (or link) to the next node. 
+    Unlike arrays, linked list elements are not stored in contiguous memory locations.
+  </p>
+
+  <!-- Key Characteristics -->
+  <div class="info-box">
+    <b>Key Characteristics:</b>
+    <ul>
+      <li>✔ Dynamic size (grows/shrinks during runtime)</li>
+      <li>✔ Elements stored in non-contiguous memory</li>
+      <li>✔ Efficient insertion and deletion</li>
+      <li>✔ Sequential access only</li>
+      <li>✔ Extra memory for storing pointers</li>
+    </ul>
+  </div>
+
+  <!-- Linked List Structure -->
+  <div class="linked-list">
+    <h3>Linked List Structure</h3>
+    <div class="list-container">
+      <div class="node">10<br><small>Node 1</small></div>
+      <div class="arrow">→</div>
+      <div class="node">20<br><small>Node 2</small></div>
+      <div class="arrow">→</div>
+      <div class="node">30<br><small>Node 3</small></div>
+      <div class="arrow">→</div>
+      <div class="node">40<br><small>Node 4</small></div>
+      <div class="arrow">→</div>
+      <div class="null">NULL</div>
+    </div>
+    <button onclick="startTraversal()">▶ Show Traversal</button>
+  </div>
+
+  <!-- Memory Layout Concept -->
+  <div class="memory-layout">
+    <h3>Memory Layout Concept</h3>
+    <div class="memory-box">
+      <div class="mem-cell">
+        <b>0x3E8</b><br>Data: 10<br>Next: 0x44C
+      </div>
+      <div class="mem-cell">
+        <b>0x44C</b><br>Data: 20<br>Next: 0x4B0
+      </div>
+      <div class="mem-cell">
+        <b>0x4B0</b><br>Data: 30<br>Next: 0x514
+      </div>
+      <div class="mem-cell">
+        <b>0x514</b><br>Data: 40<br>Next: NULL
+      </div>
+    </div>
+    <p><small>Unlike arrays, linked list nodes can be stored anywhere in memory, connected via pointers.</small></p>
+  </div>
+
+  <!-- Time Complexity and Advantages -->
+  <div class="grid">
+    <div class="complexity">
+      <h3>Time Complexity</h3>
+      <table>
+        <tr><td>Access</td><td class="red">O(n)</td></tr>
+        <tr><td>Search</td><td class="red">O(n)</td></tr>
+        <tr><td>Insertion</td><td class="green">O(1)*</td></tr>
+        <tr><td>Deletion</td><td class="green">O(1)*</td></tr>
+      </table>
+      <p><small>*At known position</small></p>
+    </div>
+    <div class="advantages">
+      <h3>Advantages vs Arrays</h3>
+      <ul>
+        <li class="green">✔ Dynamic size</li>
+        <li class="green">✔ Efficient insertion/deletion</li>
+        <li class="red">✘ No random access</li>
+        <li class="red">✘ Extra memory overhead</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Node Structure (JavaScript) -->
+  <div class="code-section">
+    <h3>Node Structure (JavaScript)</h3>
+    <pre><code>
+class ListNode {
+  constructor(data) {
+    this.data = data;
+    this.next = null;
+  }
+}
+
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.size = 0;
+  }
+  // Example: Add at beginning
+  addFirst(data) {
+    const newNode = new ListNode(data);
+    newNode.next = this.head;
+    this.head = newNode;
+    this.size++;
+  }
+}
+    </code></pre>
+  </div>
+
+  <!-- JavaScript for Traversal -->
+  <script>
+    function startTraversal() {
+      const nodes = document.querySelectorAll(".node");
+      let i = 0;
+
+      nodes.forEach(node => node.classList.remove("active"));
+
+      const interval = setInterval(() => {
+        if (i > 0) nodes[i-1].classList.remove("active"); 
+        if (i < nodes.length) {
+          nodes[i].classList.add("active");
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

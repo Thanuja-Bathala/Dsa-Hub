@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stacks – DSA Hub</title>
+<style>
+  :root{
+    --pink:#d63384;
+    --pink-600:#a61e4d;
+    --pink-50:#fff0f6;
+    --pink-100:#ffe6f0;
+    --ink:#333;
+    --card:#ffffff;
+    --shadow:0 4px 14px rgba(0,0,0,.08);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background:var(--pink-50);
+    color:var(--ink);
+  }
+
+  /* Navbar */
+  .navbar{
+    position:sticky; top:0; z-index:50;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 20px; background:var(--pink); color:#fff;
+  }
+  .logo{font-weight:800; font-size:22px; letter-spacing:.2px}
+  .logo a{color:#fff; text-decoration:none}
+  .nav-links{list-style:none; display:flex; gap:18px; margin:0; padding:0}
+  .nav-links a{color:#fff; text-decoration:none; font-weight:600}
+  .nav-links a:hover{text-decoration:underline}
+
+  /* Page shell */
+  .wrap{max-width:1040px; margin:28px auto; padding:0 16px}
+  h1{margin:0 0 10px; color:var(--pink)}
+  .lead{margin:0 0 22px; line-height:1.55}
+
+  /* Cards */
+  .card{
+    background:var(--card);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:18px;
+  }
+  .grid-2{
+    display:grid; gap:18px; grid-template-columns:1fr;
+  }
+  @media (min-width:900px){ .grid-2{ grid-template-columns:1fr 1fr; } }
+
+  .pill{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 10px; border-radius:999px;
+    background:var(--pink-100); color:var(--pink); font-weight:700; font-size:14px;
+  }
+  .bullets{margin:10px 0 0; padding-left:0; list-style:none}
+  .bullets li{margin:8px 0; padding-left:22px; position:relative}
+  .bullets li::before{
+    content:"✓"; color:var(--pink); font-weight:900;
+    position:absolute; left:0; top:0;
+  }
+
+  /* VISUALIZATION */
+  .viz-card{margin-top:16px}
+  .viz{
+    display:grid; grid-template-columns: 1fr auto; gap:18px;
+    align-items:center; padding:18px; border-radius:12px; background:#fff;
+    border:1px solid #f4c3d7;
+  }
+  .stack-frame{
+    height:280px; width:160px; margin:auto; position:relative;
+    border:2px dashed var(--pink); border-radius:10px;
+    background:linear-gradient(#fff, #fff) padding-box,
+               repeating-linear-gradient(0deg, transparent 0 28px, rgba(214,51,132,.06) 28px 29px) border-box;
+    display:flex; align-items:flex-end; justify-content:center; overflow:hidden;
+  }
+  .stack-col{
+    width:120px; display:flex; flex-direction:column-reverse; gap:8px; align-items:center; padding:10px 0;
+  }
+  .el{
+    width:100%; text-align:center; padding:10px 0;
+    border:2px solid var(--pink); background:#ffc3dd; color:#4a4a4a; border-radius:8px;
+    font-weight:700; letter-spacing:.3px;
+    animation:fadeIn .35s ease both;
+  }
+  .top-label{
+    font-weight:800; color:var(--pink-600); white-space:nowrap;
+    display:flex; align-items:center; gap:6px;
+  }
+  .top-label::before{content:"←"; font-weight:900}
+  .bottom-row{display:flex; justify-content:space-between; margin-top:8px; font-size:13px; color:#666}
+  .badge{display:inline-block; background:var(--pink-100); color:var(--pink); padding:4px 10px; border-radius:999px; font-weight:700}
+
+  /* Controls */
+  .controls{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:14px}
+  .btn{
+    border:none; border-radius:10px; padding:10px 14px; font-weight:800; cursor:pointer;
+    color:#fff; box-shadow:0 2px 8px rgba(0,0,0,.12); transition:transform .06s ease, filter .2s ease;
+  }
+  .btn:active{ transform:translateY(1px) }
+  .btn-green{ background:#2ecc71 }
+  .btn-red{ background:#e74c3c }
+  .btn-blue{ background:#3e8ef7 }
+  .btn span.small{opacity:.9; font-weight:600}
+
+  /* Info mini cards */
+  .mini{ background:#fff; border:1px solid #f4c3d7; }
+  .mini h3{ margin:0 0 8px; color:var(--pink-600) }
+  .kv{display:grid; grid-template-columns:1fr auto; gap:6px; margin-top:8px}
+  .kv div:last-child{font-weight:800; color:var(--pink-600)}
+
+  /* Code block */
+  pre{
+    background:#0f172a; color:#a6ffea; padding:18px; border-radius:12px; overflow:auto;
+    line-height:1.4; font-size:14px;
+  }
+
+  /* Animations */
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
+  .slide-in{ animation:slideIn .35s ease both }
+  @keyframes slideIn{ from{ transform:translateY(24px); opacity:0 } to{ transform:translateY(0); opacity:1 } }
+  .slide-out{ animation:slideOut .28s ease forwards }
+  @keyframes slideOut{ to{ transform:translateY(-24px); opacity:0 } }
+  .peek{ animation:peekPulse 1s ease }
+  @keyframes peekPulse{
+    0%{ box-shadow:0 0 0 0 rgba(62,142,247,.45) }
+    100%{ box-shadow:0 0 0 12px rgba(62,142,247,0) }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div id="navbar"></div>
+<script>
+  fetch("navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+</script>
+
+
+<div class="wrap">
+  <h1>Stacks</h1>
+  <p class="lead">A stack is a linear data structure that follows the <b>LIFO (Last In, First Out)</b> principle. Elements are added and removed from the same end, called the <b>top</b> of the stack.</p>
+
+  <!-- Key Characteristics -->
+  <div class="card">
+    <div class="pill">Key Characteristics</div>
+    <ul class="bullets">
+      <li>LIFO (Last In First Out) discipline</li>
+      <li>Access only to the top element</li>
+      <li>Two main operations: <b>Push</b> and <b>Pop</b></li>
+      <li>Can be implemented using Arrays or Linked Lists</li>
+      <li>Used in function calls, undo/redo, expression evaluation</li>
+    </ul>
+  </div>
+
+  <!-- Visualization -->
+  <div class="card viz-card">
+    <div class="pill">Stack Visualization</div>
+
+    <div class="viz">
+      <!-- Stack frame + column -->
+      <div>
+        <div class="stack-frame">
+          <div id="stackCol" class="stack-col"></div>
+        </div>
+        <div class="bottom-row">
+          <span>BOTTOM</span>
+          <span id="sizeBadge" class="badge">Size: 0 | Top: —</span>
+        </div>
+
+        <div class="controls">
+          <button id="btnPush" class="btn btn-green" onclick="pushEl()">+ Push <span class="small" id="nextVal">()</span></button>
+          <button class="btn btn-red" onclick="popEl()">− Pop</button>
+          <button class="btn btn-blue" onclick="peekEl()">👁 Peek</button>
+        </div>
+      </div>
+
+      <!-- Right side TOP label -->
+      <div class="top-label">TOP</div>
+    </div>
+  </div>
+
+  <!-- LIFO + Complexity + Operations -->
+  <div class="grid-2" style="margin-top:18px">
+    <div class="card mini">
+      <h3>LIFO Principle</h3>
+      <div class="bullets" style="list-style:none; padding-left:0">
+        <li>➕ <b>Push</b>: Add to top</li>
+        <li>➖ <b>Pop</b>: Remove from top</li>
+        <li>👁 <b>Peek</b>: View top</li>
+      </div>
+    </div>
+
+    <div class="card mini">
+      <h3>Time Complexity</h3>
+      <div class="kv">
+        <div>Push</div><div>O(1)</div>
+        <div>Pop</div><div>O(1)</div>
+        <div>Peek/Top</div><div>O(1)</div>
+        <div>Search</div><div>O(n)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mini" style="margin-top:18px">
+    <h3>Stack Operations</h3>
+    <ul class="bullets">
+      <li><b>Push</b>: Add element to top</li>
+      <li><b>Pop</b>: Remove top element</li>
+      <li><b>Peek</b>: Return (do not remove) the top element</li>
+      <li><b>isEmpty</b>: Check whether the stack has no elements</li>
+    </ul>
+  </div>
+
+  <!-- Code -->
+  <div class="card" style="margin-top:18px">
+    <div class="pill">Stack Implementation (JavaScript)</div>
+<pre>
+// Minimal Array-based Stack
+class Stack {
+  constructor() { this.items = []; }
+  push(x) { this.items.push(x); }
+  pop()  { return this.items.pop(); }
+  peek() { return this.items[this.items.length - 1]; }
+  isEmpty() { return this.items.length === 0; }
+}
+</pre>
+  </div>
+</div>
+
+<script>
+  // ----- State -----
+  const col = document.getElementById('stackCol');
+  const sizeBadge = document.getElementById('sizeBadge');
+  const nextValSpan = document.getElementById('nextVal');
+
+  const stack = [];
+  let nextVal = genNextVal();
+
+  // Initialize with a couple of values (like screenshot)
+  [10,20,40].forEach(v => pushInternal(v, false));
+  updateBadges();
+  updateNextPreview();
+
+  // ----- Helpers -----
+  function genNextVal(){
+    // neat round-ish numbers
+    const choices = [10,20,30,40,50,60,70,80,90];
+    return choices[Math.floor(Math.random()*choices.length)];
+  }
+
+  function updateBadges(){
+    sizeBadge.textContent = `Size: ${stack.length} | Top: ${stack.length ? stack[stack.length-1] : "—"}`;
+  }
+  function updateNextPreview(){
+    nextValSpan.textContent = `(${nextVal})`;
+  }
+
+  function createEl(value){
+    const el = document.createElement('div');
+    el.className = 'el';
+    el.textContent = value;
+    return el;
+  }
+
+  // Render append single (no reflow of all)
+  function pushInternal(value, animate=true){
+    stack.push(value);
+    const el = createEl(value);
+    if(animate) el.classList.add('slide-in');
+    col.appendChild(el);
+  }
+
+  // Remove the last rendered child (top)
+  function popInternal(){
+    if(!stack.length) return null;
+    stack.pop();
+    const topEl = col.lastElementChild;
+    return new Promise(resolve=>{
+      if(!topEl){ resolve(null); return; }
+      topEl.classList.add('slide-out');
+      topEl.addEventListener('animationend', ()=>{ topEl.remove(); resolve(true); }, {once:true});
+    });
+  }
+
+  // ----- Controls -----
+  async function pushEl(){
+    pushInternal(nextVal, true);
+    updateBadges();
+    nextVal = genNextVal();
+    updateNextPreview();
+  }
+
+  async function popEl(){
+    if(!stack.length){ alert('Stack is empty!'); return; }
+    await popInternal();
+    updateBadges();
+  }
+
+  function peekEl(){
+    if(!stack.length){ alert('Stack is empty!'); return; }
+    const topEl = col.lastElementChild;
+    topEl.classList.remove('peek'); // restart animation if clicked twice
+    void topEl.offsetWidth;
+    topEl.classList.add('peek');
+    alert('Top element: ' + stack[stack.length-1]);
+  }
+</script>
+</body>
+</html>

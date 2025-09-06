@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Array Sorting Visualization</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fdf2f8;
+      margin: 0;
+      padding: 0;
+    }
+
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #d63384;
+    color: white;
+    padding: 10px 20px;
+}
+.navbar .logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+}
+.logo a{
+    text-decoration: none;
+    color: white;
+    
+}
+
+    /* Layout after navbar */
+    .content {
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: #fce7f3;
+      padding: 20px;
+      height: 100vh;
+    }
+    .sidebar h3 {
+      color: #db2777;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar ul li {
+      margin: 10px 0;
+      cursor: pointer;
+      color: #6b21a8;
+    }
+
+    /* Main content */
+    .main {
+      flex: 1;
+      padding: 20px;
+    }
+    h2 {
+      color: #be185d;
+    }
+
+    /* Visualization bars */
+    .bars {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      height: 200px;
+      margin: 20px 0;
+      gap: 10px;
+    }
+    .bar {
+      width: 40px;
+      background: #a855f7;
+      color: white;
+      text-align: center;
+      transition: all 0.5s ease;
+    }
+
+    /* Buttons */
+    .controls {
+      margin: 15px 0;
+    }
+    button, select {
+      padding: 8px 12px;
+      margin-right: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button {
+      background: #6366f1;
+      color: white;
+    }
+    button:hover {
+      background: #4f46e5;
+    }
+
+    /* Info cards */
+    .cards {
+      display: flex;
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .card {
+      flex: 1;
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-left: 4px solid #9333ea;
+    }
+    .card h4 {
+      margin-top: 0;
+      color: #6d28d9;
+    }
+    .yes { color: green; }
+    .no { color: red; }
+
+    /* Code block */
+    pre {
+      background: #0f172a;
+      color: #00ff00; /* ✅ green text */
+      padding: 15px;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+<div id="navbar"></div>
+<script>
+  fetch("navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+</script>
+
+
+
+    <!-- Main content -->
+    <div class="main">
+      <h2>Array Sorting</h2>
+      <p>Visualize popular sorting algorithms and understand how they rearrange array elements to achieve sorted order.</p>
+
+      <!-- Sorting Visualization -->
+      <div class="bars" id="bars"></div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <select id="algorithm">
+          <option value="bubble">Bubble Sort</option>
+          <option value="selection">Selection Sort</option>
+          <option value="insertion">Insertion Sort</option>
+        </select>
+        <button onclick="startSort()">Start Sort</button>
+        <button onclick="resetArray()">Reset</button>
+        <button onclick="randomArray()">Random</button>
+      </div>
+
+      <!-- Info Cards -->
+      <div class="cards">
+        <div class="card">
+          <h4>Bubble Sort</h4>
+          <p>Time (Avg): O(n²)<br>Time (Best): O(n)<br>Space: O(1)<br>Stable: <span class="yes">Yes</span></p>
+          <p>Compares adjacent elements and swaps if they’re in wrong order.</p>
+        </div>
+        <div class="card">
+          <h4>Selection Sort</h4>
+          <p>Time (All): O(n²)<br>Space: O(1)<br>Stable: <span class="no">No</span><br>Swaps: Minimal</p>
+          <p>Finds minimum element and places it at beginning each time.</p>
+        </div>
+        <div class="card">
+          <h4>Insertion Sort</h4>
+          <p>Time (Avg): O(n²)<br>Time (Best): O(n)<br>Space: O(1)<br>Stable: <span class="yes">Yes</span></p>
+          <p>Builds sorted array one element at a time by insertion.</p>
+        </div>
+      </div>
+
+      <!-- Code block -->
+      <h3 id="codeTitle">Bubble Sort Implementation</h3>
+      <pre id="codeBlock"></pre>
+    </div>
+  </div>
+
+  <script>
+    let array = [64, 34, 25, 12, 22, 11, 90];
+    const barsContainer = document.getElementById("bars");
+    const codeBlock = document.getElementById("codeBlock");
+    const codeTitle = document.getElementById("codeTitle");
+    const codes = {
+      bubble: `function bubbleSort(arr) {
+  for (let i = 0; i < arr.length-1; i++) {
+    for (let j = 0; j < arr.length-i-1; j++) {
+      if (arr[j] > arr[j+1]) {
+        [arr[j], arr[j+1]] = [arr[j+1], arr[j]];
+      }
+    }
+  }
+}`,
+      selection: `function selectionSort(arr) {
+  for (let i = 0; i < arr.length-1; i++) {
+    let min = i;
+    for (let j = i+1; j < arr.length; j++) {
+      if (arr[j] < arr[min]) min = j;
+    }
+    [arr[i], arr[min]] = [arr[min], arr[i]];
+  }
+}`,
+      insertion: `function insertionSort(arr) {
+  for (let i = 1; i < arr.length; i++) {
+    let key = arr[i], j = i - 1;
+    while (j >= 0 && arr[j] > key) {
+      arr[j+1] = arr[j];
+      j--;
+    }
+    arr[j+1] = key;
+  }
+}`
+    };
+
+    // Render array bars
+    function renderArray(arr) {
+      barsContainer.innerHTML = "";
+      arr.forEach(val => {
+        const bar = document.createElement("div");
+        bar.classList.add("bar");
+        bar.style.height = val * 2 + "px";
+        bar.textContent = val;
+        barsContainer.appendChild(bar);
+      });
+    }
+
+    // Delay function
+    function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+    // Sorting algorithms with animations
+    async function bubbleSortAnim() {
+      let bars = document.querySelectorAll(".bar");
+      for (let i = 0; i < array.length-1; i++) {
+        for (let j = 0; j < array.length-i-1; j++) {
+          bars[j].style.background = "red";
+          bars[j+1].style.background = "red";
+          await sleep(500);
+          if (array[j] > array[j+1]) {
+            [array[j], array[j+1]] = [array[j+1], array[j]];
+            renderArray(array);
+            bars = document.querySelectorAll(".bar");
+          }
+          bars[j].style.background = "#a855f7";
+          bars[j+1].style.background = "#a855f7";
+        }
+      }
+    }
+
+    async function selectionSortAnim() {
+      let bars = document.querySelectorAll(".bar");
+      for (let i = 0; i < array.length-1; i++) {
+        let min = i;
+        bars[min].style.background = "blue";
+        for (let j = i+1; j < array.length; j++) {
+          bars[j].style.background = "red";
+          await sleep(400);
+          if (array[j] < array[min]) {
+            bars[min].style.background = "#a855f7";
+            min = j;
+            bars[min].style.background = "blue";
+          } else {
+            bars[j].style.background = "#a855f7";
+          }
+        }
+        [array[i], array[min]] = [array[min], array[i]];
+        renderArray(array);
+        bars = document.querySelectorAll(".bar");
+      }
+    }
+
+    async function insertionSortAnim() {
+      let bars = document.querySelectorAll(".bar");
+      for (let i = 1; i < array.length; i++) {
+        let key = array[i];
+        let j = i - 1;
+        while (j >= 0 && array[j] > key) {
+          array[j+1] = array[j];
+          j--;
+          renderArray(array);
+          bars = document.querySelectorAll(".bar");
+          await sleep(400);
+        }
+        array[j+1] = key;
+        renderArray(array);
+        bars = document.querySelectorAll(".bar");
+      }
+    }
+
+    // Controls
+    function startSort() {
+      const algo = document.getElementById("algorithm").value;
+      codeBlock.textContent = codes[algo];
+      codeTitle.textContent = algo.charAt(0).toUpperCase()+algo.slice(1) + " Sort Implementation";
+      if (algo === "bubble") bubbleSortAnim();
+      else if (algo === "selection") selectionSortAnim();
+      else insertionSortAnim();
+    }
+
+    function resetArray() {
+      array = [64, 34, 25, 12, 22, 11, 90];
+      renderArray(array);
+    }
+
+    function randomArray() {
+      array = Array.from({length: 7}, () => Math.floor(Math.random()*90)+10);
+      renderArray(array);
+    }
+
+    // Initial
+    renderArray(array);
+    codeBlock.textContent = codes.bubble;
+  </script>
+</body>
+</html>

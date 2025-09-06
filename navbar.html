@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSA Hub</title>
+  <style>
+    /* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Body background */
+body {
+  background: #ffe6f0;  /* light pink */
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Navbar container */
+nav {
+  width: 100%;
+  background: #fff;   /* white navbar */
+  color: #d81b60;     /* pink text */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 40px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Logo section */
+.logo a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #d81b60;   /* dark pink */
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.logo-img {
+  width: 45px;
+  height: 45px;
+  margin-right: 10px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Menu styling */
+#menu {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+#menu li a {
+  text-decoration: none;
+  color: #333;   /* dark gray text */
+  font-size: 18px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: 0.3s ease;
+}
+
+#menu li a:hover {
+  background: #f8bbd0;   /* soft pink hover */
+  color: #d81b60;
+}
+
+/* Hero Section (like your banner) */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #ffe6f0, #f8bbd0);
+}
+
+.hero h1 {
+  font-size: 36px;
+  color: #c2185b;   /* dark pink */
+  margin-bottom: 15px;
+}
+
+.hero p {
+  font-size: 18px;
+  color: #444;
+  margin-bottom: 25px;
+}
+
+/* Buttons */
+.btn {
+  background: #d81b60;
+  color: #fff;
+  padding: 12px 24px;
+  margin: 5px;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn:hover {
+  background: #ad1457;
+}
+
+/* Content sections */
+.section {
+  margin: 30px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 90%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #menu {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  #menu li {
+    width: 100%;
+  }
+
+  #menu li a {
+    display: block;
+    width: 100%;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="logo">
+      <a href="./index.html">
+        <img src="./image.gif" alt="DSA Hub Logo" class="logo-img">
+        <span>DSA Hub</span>
+      </a>
+    </div>
+    <ul id="menu">
+      <li><a href="./index.html">Home</a></li>
+      <li><a href="./practice.html">Practice</a></li>
+      <li><a href="./about.html">About</a></li>
+      <li><a href="./login.html">Login</a></li>
+    </ul>
+  </nav>
+</body>
+</html>

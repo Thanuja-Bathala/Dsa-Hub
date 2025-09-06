@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graph Traversal</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #fff0f6;
+      color: #333;
+    }
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ff69b4;
+      padding: 15px 30px;
+    }
+    .navbar .logo a {
+      color: white;
+      font-size: 22px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .navbar .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar .nav-links li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    .navbar .nav-links li a:hover {
+      color: #222;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #d6336c;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .active {
+      background: #d6336c;
+      color: white;
+    }
+    .inactive {
+      background: #f8d7e2;
+      color: #d6336c;
+    }
+
+    /* Graph Section */
+    .graph-box {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    canvas {
+      display: block;
+      margin: auto;
+      border-radius: 8px;
+      background: #f8d7e2;
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+    }
+    select, button {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button.start {
+      background: #d6336c;
+      color: white;
+      border: none;
+    }
+    button.reset {
+      background: #ddd;
+      border: none;
+    }
+
+    /* Info Cards */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .card h3 {
+      color: #d6336c;
+      margin-top: 0;
+    }
+
+    /* Code block */
+    .code-block {
+      background: black;
+      color: #00ff7f;
+      padding: 20px;
+      border-radius: 12px;
+      font-family: monospace;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+   <div id="navbar"></div>
+<script>
+  fetch("navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+</script>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1>Graph Traversal</h1>
+    <p>Learn Breadth-First Search (BFS) and Depth-First Search (DFS) algorithms with interactive animations.</p>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button id="bfsTab" class="tab active">Breadth-First Search (BFS)</button>
+      <button id="dfsTab" class="tab inactive">Depth-First Search (DFS)</button>
+    </div>
+
+    <!-- Graph Box -->
+    <div class="graph-box">
+      <h2 id="algoTitle">Breadth-First Search (BFS)</h2>
+      <canvas id="graphCanvas" width="600" height="300"></canvas>
+      <div class="controls">
+        <label>Start Node:</label>
+        <select id="startNode">
+          <option>A</option>
+          <option>B</option>
+          <option>C</option>
+          <option>D</option>
+          <option>E</option>
+          <option>F</option>
+        </select>
+        <button class="start" id="startBtn">Start BFS</button>
+        <button class="reset" id="resetBtn">Reset</button>
+      </div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="grid">
+      <div class="card">
+        <h3>Breadth-First Search (BFS)</h3>
+        <ul>
+          <li>Explores neighbors level by level</li>
+          <li>Uses queue data structure (FIFO)</li>
+          <li>Finds shortest path in unweighted graphs</li>
+          <li>Better for finding nearby nodes</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Depth-First Search (DFS)</h3>
+        <ul>
+          <li>Goes deep into one path before backtracking</li>
+          <li>Uses stack data structure (LIFO)</li>
+          <li>Good for detecting cycles, topological sorting</li>
+          <li>Memory efficient for deep graphs</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Code Section -->
+    <div class="code-block">
+function bfs(graph, startNode) {
+  const visited = new Set();
+  const queue = [startNode];
+  const result = [];
+
+  while (queue.length > 0) {
+    const currentNode = queue.shift();
+    if (!visited.has(currentNode)) {
+      visited.add(currentNode);
+      result.push(currentNode);
+
+      const neighbors = graph.get(currentNode) || [];
+      neighbors.forEach((neighbor) => {
+        if (!visited.has(neighbor)) {
+          queue.push(neighbor);
+        }
+      });
+    }
+  }
+  return result;
+}
+    </div>
+  </div>
+
+  <script>
+    // Tabs
+    const bfsTab = document.getElementById("bfsTab");
+    const dfsTab = document.getElementById("dfsTab");
+    const algoTitle = document.getElementById("algoTitle");
+    const startBtn = document.getElementById("startBtn");
+
+    bfsTab.addEventListener("click", () => {
+      bfsTab.classList.add("active");
+      bfsTab.classList.remove("inactive");
+      dfsTab.classList.remove("active");
+      dfsTab.classList.add("inactive");
+      algoTitle.textContent = "Breadth-First Search (BFS)";
+      startBtn.textContent = "Start BFS";
+    });
+
+    dfsTab.addEventListener("click", () => {
+      dfsTab.classList.add("active");
+      dfsTab.classList.remove("inactive");
+      bfsTab.classList.remove("active");
+      bfsTab.classList.add("inactive");
+      algoTitle.textContent = "Depth-First Search (DFS)";
+      startBtn.textContent = "Start DFS";
+    });
+
+    // Graph structure
+    const graph = {
+      A: ["B", "C"],
+      B: ["A", "D", "E"],
+      C: ["A", "F"],
+      D: ["B"],
+      E: ["B", "F"],
+      F: ["C", "E"]
+    };
+
+    // Node positions
+    const positions = {
+      A: { x: 100, y: 50 },
+      B: { x: 50, y: 150 },
+      C: { x: 180, y: 150 },
+      D: { x: 20, y: 250 },
+      E: { x: 120, y: 250 },
+      F: { x: 220, y: 250 }
+    };
+
+    const canvas = document.getElementById("graphCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function drawGraph(highlighted = []) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw edges
+      ctx.strokeStyle = "#333";
+      ctx.lineWidth = 2;
+      for (let node in graph) {
+        graph[node].forEach(neighbor => {
+          ctx.beginPath();
+          ctx.moveTo(positions[node].x, positions[node].y);
+          ctx.lineTo(positions[neighbor].x, positions[neighbor].y);
+          ctx.stroke();
+        });
+      }
+
+      // Draw nodes
+      for (let node in positions) {
+        ctx.beginPath();
+        ctx.arc(positions[node].x, positions[node].y, 20, 0, 2 * Math.PI);
+        ctx.fillStyle = highlighted.includes(node) ? "#d6336c" : "white";
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = highlighted.includes(node) ? "white" : "black";
+        ctx.font = "bold 16px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(node, positions[node].x, positions[node].y);
+      }
+    }
+
+    function bfs(start) {
+      const visited = new Set();
+      const queue = [start];
+      const order = [];
+
+      while (queue.length) {
+        const node = queue.shift();
+        if (!visited.has(node)) {
+          visited.add(node);
+          order.push(node);
+          queue.push(...graph[node]);
+        }
+      }
+      return order;
+    }
+
+    function dfs(start) {
+      const visited = new Set();
+      const order = [];
+      function explore(node) {
+        if (visited.has(node)) return;
+        visited.add(node);
+        order.push(node);
+        graph[node].forEach(explore);
+      }
+      explore(start);
+      return order;
+    }
+
+    function animateTraversal(order) {
+      let i = 0;
+      const interval = setInterval(() => {
+        drawGraph(order.slice(0, i + 1));
+        i++;
+        if (i >= order.length) clearInterval(interval);
+      }, 1000);
+    }
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+      const startNode = document.getElementById("startNode").value;
+      const algo = startBtn.textContent.includes("BFS") ? bfs : dfs;
+      const order = algo(startNode);
+      animateTraversal(order);
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      drawGraph([]);
+    });
+
+    // Initial draw
+    drawGraph([]);
+  </script>
+</body>
+</html>

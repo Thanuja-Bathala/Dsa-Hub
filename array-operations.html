@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Array Operations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fdf2f8;
+      margin: 0;
+      padding: 20px;
+    }
+    .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #d63384;
+    color: white;
+    padding: 10px 20px;
+}
+.navbar .logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+}
+.logo a{
+    text-decoration: none;
+    color: white;
+    
+}
+
+    h2 {
+      color: #d63384;
+    }
+
+    .array-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .array-element {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      min-width: 60px;
+      transition: all 0.5s ease;
+    }
+
+    .array-element.highlight {
+      background: #ffe066;
+      transform: scale(1.2);
+    }
+    .controls{
+        width: 400px;
+    }
+
+    .controls, .operations, .info {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 10px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .controls input {
+      margin: 8px 0;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .operations{
+      width: 470px;
+    }
+
+    .operations button {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      width: 100px;
+    }
+
+    .insert { background: #28a745; }
+    .delete { background: #dc3545; }
+    .update { background: #007bff; }
+    .reset { background: #6c757d; }
+
+    .info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .info-box {
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .insert-info { background: #e9f7ef; border-left: 5px solid #28a745; }
+    .delete-info { background: #fdecea; border-left: 5px solid #dc3545; }
+    .update-info { background: #eaf3fc; border-left: 5px solid #007bff; }
+
+    @media (max-width: 600px) {
+      .array-element {
+        min-width: 40px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="navbar"></div>
+<script>
+  fetch("navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+</script>
+
+
+  <h2>Array Operations</h2>
+  <p>Explore common array operations with interactive visualizations. See how insertion, deletion, and modification work step by step.</p>
+
+  <div class="array-container" id="arrayContainer"></div>
+  <p><b>Array Length:</b> <span id="arrayLength"></span></p>
+
+  <div class="controls">
+    <h3>Input Controls</h3>
+    <input type="number" id="valueInput" placeholder="Enter value">
+    <input type="number" id="indexInput" placeholder="Enter index">
+  </div>
+
+  <div class="operations">
+    <h3>Operations</h3>
+    <button class="insert" onclick="insertElement()">+ Insert</button>
+    <button class="delete" onclick="deleteElement()">Delete</button>
+    <button class="update" onclick="updateElement()">Update</button>
+    <button class="reset" onclick="resetArray()">Reset</button>
+  </div>
+
+  <div class="info">
+    <div class="info-box insert-info">
+      <b>Insertion</b><br>
+      Time Complexity: O(n)<br>
+      Elements after insertion point need to be shifted right.
+    </div>
+    <div class="info-box delete-info">
+      <b>Deletion</b><br>
+      Time Complexity: O(n)<br>
+      Elements after deletion point need to be shifted left.
+    </div>
+    <div class="info-box update-info">
+      <b>Update</b><br>
+      Time Complexity: O(1)<br>
+      Direct access to elements using index.
+    </div>
+  </div>
+
+  <script>
+    let arr = [10, 25, 30, 45, 60];
+
+    function renderArray(highlightIndex = -1) {
+      const container = document.getElementById('arrayContainer');
+      container.innerHTML = "";
+      arr.forEach((val, idx) => {
+        const div = document.createElement("div");
+        div.classList.add("array-element");
+        if (idx === highlightIndex) div.classList.add("highlight");
+        div.innerHTML = `${val}<br><small>Index ${idx}</small>`;
+        container.appendChild(div);
+      });
+      document.getElementById('arrayLength').innerText = arr.length;
+    }
+
+    function insertElement() {
+      const value = parseInt(document.getElementById('valueInput').value);
+      const index = parseInt(document.getElementById('indexInput').value);
+      if (isNaN(value) || isNaN(index) || index < 0 || index > arr.length) {
+        alert("Enter valid value and index!");
+        return;
+      }
+      arr.splice(index, 0, value);
+      renderArray(index);
+    }
+
+    function deleteElement() {
+      const index = parseInt(document.getElementById('indexInput').value);
+      if (isNaN(index) || index < 0 || index >= arr.length) {
+        alert("Enter valid index!");
+        return;
+      }
+      arr.splice(index, 1);
+      renderArray(index);
+    }
+
+    function updateElement() {
+      const value = parseInt(document.getElementById('valueInput').value);
+      const index = parseInt(document.getElementById('indexInput').value);
+      if (isNaN(value) || isNaN(index) || index < 0 || index >= arr.length) {
+        alert("Enter valid value and index!");
+        return;
+      }
+      arr[index] = value;
+      renderArray(index);
+    }
+
+    function resetArray() {
+      arr = [10, 25, 30, 45, 60];
+      renderArray();
+    }
+
+    // Initial render
+    renderArray();
+  </script>
+</body>
+</html>

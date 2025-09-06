@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSA Hub - Queues</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f9ff;
+      display: flex;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #d63384;
+      color: white;
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .nav-links li a:hover {
+      text-decoration: underline;
+    }
+    .logo a {
+      text-decoration: none;
+      color: white;
+    }
+
+    /* Main Content Only (no sidebar) */
+    .main {
+      flex: 1;
+      padding: 20px 40px;
+      overflow-y: auto;
+    }
+    h1 {
+      color: #b91c5c;
+    }
+    h2 {
+      margin-top: 25px;
+      color: #b91c5c;
+    }
+    .card {
+      background: #f1f6ff;
+      border-left: 4px solid #b91c5c;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 15px 0;
+    }
+
+    /* Queue Visualization */
+    .queue-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .node {
+      background: #b3d1ff;
+      padding: 15px 20px;
+      border-radius: 8px;
+      border: 2px solid #b91c5c;
+      font-weight: bold;
+    }
+    .arrow {
+      font-size: 20px;
+      color: #b91c5c;
+    }
+    .controls {
+      text-align: center;
+      margin: 15px 0;
+    }
+    .controls button {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      background: #b91c5c;
+      color: white;
+      cursor: pointer;
+    }
+    .controls button:hover {
+      background: #9f1348;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: pink;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+
+<div id="navbar"></div>
+<script>
+  fetch("navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+</script>
+  <!-- Main Content Only -->
+  <div class="main">
+    <h1>Queues</h1>
+    <h2>What is a Queue?</h2>
+    <p>A queue is a linear data structure that follows the First In First Out (FIFO) principle. 
+      Elements are added at one end (rear) and removed from the other end (front).</p>
+
+    <div class="card">
+      <h3>Key Characteristics:</h3>
+      <ul>
+        <li>FIFO (First In First Out)</li>
+        <li>Two ends: Front (removal), Rear (insertion)</li>
+        <li>Main operations: Enqueue and Dequeue</li>
+        <li>Implemented with arrays or linked lists</li>
+        <li>Used in scheduling, buffering, BFS</li>
+      </ul>
+    </div>
+
+    <h2>Queue Visualization</h2>
+    <div class="queue-box" id="queue">
+      <div class="node">10</div>
+      <span class="arrow">➡</span>
+      <div class="node">20</div>
+      <span class="arrow">➡</span>
+      <div class="node">30</div>
+    </div>
+
+    <div class="controls">
+      <button onclick="enqueue()">Enqueue</button>
+      <button onclick="dequeue()">Dequeue</button>
+    </div>
+
+    <h2>Time Complexity</h2>
+    <ul>
+      <li>Enqueue: O(1)</li>
+      <li>Dequeue: O(1)</li>
+      <li>Front/Peek: O(1)</li>
+      <li>Search: O(n)</li>
+    </ul>
+
+    <h2>Queue Implementation (JavaScript)</h2>
+    <pre>
+class Queue {
+  constructor() {
+    this.items = [];
+  }
+  enqueue(element) { this.items.push(element); }
+  dequeue() { return this.items.shift(); }
+  front() { return this.items[0]; }
+  isEmpty() { return this.items.length === 0; }
+}
+    </pre>
+  </div>
+
+  <script>
+    const queueContainer = document.getElementById("queue");
+
+    function enqueue() {
+      const newNode = document.createElement("div");
+      newNode.className = "node";
+      newNode.innerText = Math.floor(Math.random() * 100);
+      const arrow = document.createElement("span");
+      arrow.className = "arrow";
+      arrow.innerText = "➡";
+      queueContainer.appendChild(arrow);
+      queueContainer.appendChild(newNode);
+    }
+
+    function dequeue() {
+      if (queueContainer.children.length > 0) {
+        queueContainer.removeChild(queueContainer.children[0]); // remove first node
+        if (queueContainer.children[0]?.classList.contains("arrow")) {
+          queueContainer.removeChild(queueContainer.children[0]); // remove arrow
+        }
+      }
+    }
+  </script>
+</body>
+</html>

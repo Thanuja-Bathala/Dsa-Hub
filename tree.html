@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSA Hub - Trees</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #fafafa;
+      color: #333;
+    }
+
+    /* ✅ Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #d63384;
+      color: white;
+      padding: 10px 20px;
+    }
+    .navbar .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
+    .nav-links li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .logo a {
+      text-decoration: none;
+      color: white;
+    }
+
+    /* ✅ Main content */
+    .content {
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .card {
+      background:pink;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .card h2, .card h3 {
+      color:pink;
+    }
+
+    .highlight {
+      background:pink;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    .info-box {
+      background: #f0fdf4;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+
+    .tree-types {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tree-types .type {
+      background:pink;
+      padding: 10px;
+      border-radius: 6px;
+      flex: 1;
+      min-width: 200px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    /* ✅ Tree Visualization */
+    .tree {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+    }
+    .level {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .node {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid #d63384;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 20px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .node:hover {
+      transform: scale(1.1);
+      background: #ffb3d9;
+    }
+    .node.active {
+      background: #d63384;
+      color: white;
+      border-color: #a32662;
+    }
+
+    .properties {
+      margin-top: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      border: 2px solid #f3cce0;
+      width: 300px;
+      text-align: center;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+      display: none;
+    }
+    .properties h2 {
+      color: #d63384;
+      margin-bottom: 10px;
+    }
+    
+    pre {
+      background: #1e1e1e;
+      color: pink;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ Navbar -->
+ <div id="navbar"></div>
+<script>
+  fetch("navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+</script>
+
+  <!-- ✅ Content -->
+  <div class="content">
+    <div class="card">
+      <h2 style="color:black;">Trees</h2>
+      <h3 style="color: black;">What is a Tree?</h3>
+      <p>
+        A tree is a hierarchical data structure consisting of nodes connected by edges. 
+        It has a root node at the top and branches that connect to child nodes. 
+        Each node can have zero or more children, but only one parent (except the root). 
+        Trees are used to represent hierarchical relationships.
+      </p>
+      <div class="highlight">
+        <strong>Key Characteristics:</strong>
+        <ul>
+          <li>Hierarchical structure with root at top</li>
+          <li>Nodes connected by edges (no cycles)</li>
+          <li>Each node has one parent (except root)</li>
+          <li>Leaves are nodes with no children</li>
+          <li>Used in file systems, databases, decision trees</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ✅ Tree Visualization -->
+    <div class="card">
+      <h3>Binary Tree Visualization</h3>
+      <div class="tree">
+        <div class="level">
+          <div class="node" id="A">A</div>
+        </div>
+        <div class="level">
+          <div class="node" id="B">B</div>
+          <div class="node" id="C">C</div>
+        </div>
+        <div class="level">
+          <div class="node" id="D">D</div>
+          <div class="node" id="E">E</div>
+          <div class="node" id="F">F</div>
+          <div class="node" id="G">G</div>
+        </div>
+      </div>
+
+      <div class="properties" id="properties">
+        <h2>Tree Properties</h2>
+        <p><b>Clicked Node:</b> <span id="clicked"></span></p>
+        <p><b>Height:</b> <span id="height"></span></p>
+        <p><b>Total Nodes:</b> <span id="total"></span></p>
+        <p><b>Leaf Nodes:</b> <span id="leaf"></span></p>
+        <p><b>Internal Nodes:</b> <span id="internal"></span></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Common Tree Types</h3>
+      <div class="tree-types">
+        <div class="type"><strong>Binary Tree</strong><br>Each node has at most 2 children (left and right).</div>
+        <div class="type"><strong>Binary Search Tree</strong><br>Left child &lt; Parent &lt; Right child (ordered).</div>
+        <div class="type"><strong>Complete Binary Tree</strong><br>All levels filled except possibly the last.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Real-World Tree Applications</h3>
+      <div class="info-box">
+        <ul>
+          <li>File system directories</li>
+          <li>Company organizational charts</li>
+          <li>Abstract syntax trees (compilers)</li>
+          <li>Family trees and genealogy</li>
+          <li>Decision trees in Machine Learning</li>
+          <li>Database indexing (B+ trees)</li>
+        </ul>
+      </div>
+    </div>
+          <h2>Binary Tree Node</h2>
+      <pre>
+class TreeNode {
+  constructor(data) {
+    this.data = data;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+class BinaryTree {
+  constructor() {
+    this.root = null;
+  }
+  
+  // Insert node (level-order)
+  insert(data) {
+    const newNode = new TreeNode(data);
+    
+    if (!this.root) {
+      this.root = newNode;
+      return;
+    }
+    
+    const queue = [this.root];
+    
+    while (queue.length > 0) {
+      const current = queue.shift();
+      
+      if (!current.left) {
+        current.left = newNode;
+        return;
+      } else if (!current.right) {
+        current.right = newNode;
+        return;
+      } else {
+        queue.push(current.left);
+        queue.push(current.right);
+      }
+    }
+  }
+}
+      </pre>
+  </div>
+
+  <script>
+    // Tree data
+    const tree = {
+      A: ["B", "C"],
+      B: ["D", "E"],
+      C: ["F", "G"],
+      D: [],
+      E: [],
+      F: [],
+      G: []
+    };
+
+    // Tree properties
+    const getProperties = (root) => {
+      const totalNodes = Object.keys(tree).length;
+      const leafNodes = Object.keys(tree).filter(n => tree[n].length === 0);
+      const internalNodes = Object.keys(tree).filter(n => tree[n].length > 0);
+
+      const getHeight = (node) => {
+        if (tree[node].length === 0) return 0;
+        return 1 + Math.max(...tree[node].map(getHeight));
+      };
+
+      return {
+        height: getHeight(root),
+        totalNodes,
+        leafNodes,
+        internalNodes
+      };
+    };
+
+    const propertiesBox = document.getElementById("properties");
+    const clickedSpan = document.getElementById("clicked");
+    const heightSpan = document.getElementById("height");
+    const totalSpan = document.getElementById("total");
+    const leafSpan = document.getElementById("leaf");
+    const internalSpan = document.getElementById("internal");
+
+    const nodes = document.querySelectorAll(".node");
+    nodes.forEach(node => {
+      node.addEventListener("click", () => {
+        nodes.forEach(n => n.classList.remove("active"));
+        node.classList.add("active");
+
+        const props = getProperties("A");
+        clickedSpan.textContent = node.id;
+        heightSpan.textContent = props.height;
+        totalSpan.textContent = props.totalNodes;
+        leafSpan.textContent = props.leafNodes.join(", ");
+        internalSpan.textContent = props.internalNodes.join(", ");
+
+        propertiesBox.style.display = "block";
+      });
+    });
+  </script>
+</body>
+</html>

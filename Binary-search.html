@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DSA Hub - Binary Search Tree</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #fdfdfd;
+      color: #333;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ff69b4;
+      padding: 15px 30px;
+    }
+    .navbar .logo a {
+      color: white;
+      font-size: 22px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .navbar .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar .nav-links li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    .navbar .nav-links li a:hover {
+      color: #222;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    h2, h3 {
+      color: #c2185b;
+    }
+
+    .card {
+      background: #fff0f6;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 6px;
+      font-size: 14px;
+    }
+    .btn-insert { background: #27ae60; color: white; }
+    .btn-search { background: #2980b9; color: white; }
+    .btn-delete { background: #c0392b; color: white; }
+    .btn-build { background: #555; color: white; margin-top: 10px; }
+
+    input {
+      padding: 7px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 200px;
+    }
+
+    #tree-container {
+      text-align: center;
+      margin-top: 20px;
+      padding: 20px;
+      background: #f8faff;
+      border-radius: 10px;
+      min-height: 300px;
+    }
+
+    circle {
+      fill: #6c5ce7;
+      stroke: white;
+      stroke-width: 2;
+    }
+    text {
+      fill: white;
+      font-weight: bold;
+    }
+    line {
+      stroke: #333;
+      stroke-width: 2;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #90ee90;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar (Reusable) -->
+  <div id="navbar"></div>
+  <script>
+    fetch("navbar.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("navbar").innerHTML = data;
+      });
+  </script>
+
+  <div class="container">
+    <h2>Binary Search Tree</h2>
+    <p>Explore the properties and operations of Binary Search Trees with interactive insertion, deletion, and search operations.</p>
+
+    <!-- Operations -->
+    <div class="card">
+      <h3>Binary Search Tree Operations</h3>
+      <button class="btn btn-insert" onclick="setOperation('insert')">Insert</button>
+      <button class="btn btn-search" onclick="setOperation('search')">Search</button>
+      <button class="btn btn-delete" onclick="setOperation('delete')">Delete</button>
+      <br><br>
+      <input type="number" id="valueInput" placeholder="Enter value">
+      <button class="btn btn-insert" onclick="performOperation()">Go</button>
+      <br>
+      <button class="btn btn-build" onclick="buildSampleTree()">Build Sample Tree</button>
+    </div>
+
+    <!-- Tree Visualization -->
+    <div class="card">
+      <h3>Tree Structure</h3>
+      <div id="tree-container">
+        <!-- SVG Tree will be rendered here -->
+      </div>
+    </div>
+
+    <!-- Extra Info -->
+    <div class="card">
+      <h3>BST Properties</h3>
+      <ul>
+        <li>Left child &lt; Parent &lt; Right child</li>
+        <li>Inorder traversal gives sorted sequence</li>
+        <li>Efficient searching, insertion, and deletion</li>
+        <li>No duplicate values allowed</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Time Complexity</h3>
+      <ul>
+        <li>Search: O(log n)</li>
+        <li>Insert: O(log n)</li>
+        <li>Delete: O(log n)</li>
+        <small>*Average case for balanced tree. Worst case: O(n) for skewed tree</small>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>BST Implementation (JavaScript)</h3>
+      <pre>
+class BSTNode {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+class BinarySearchTree {
+  constructor() {
+    this.root = null;
+  }
+
+  insert(value) {
+    this.root = this._insertNode(this.root, value);
+  }
+
+  _insertNode(root, value) {
+    if (root === null) return new BSTNode(value);
+    if (value < root.value) root.left = this._insertNode(root.left, value);
+    else if (value > root.value) root.right = this._insertNode(root.right, value);
+    return root;
+  }
+
+  search(value) {
+    return this._searchNode(this.root, value);
+  }
+
+  _searchNode(root, value) {
+    if (root === null) return false;
+    if (value === root.value) return true;
+    return value < root.value
+      ? this._searchNode(root.left, value)
+      : this._searchNode(root.right, value);
+  }
+}
+      </pre>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    let root = null;
+    let currentOp = "insert";
+
+    class Node {
+      constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+      }
+    }
+
+    function insert(root, val) {
+      if (!root) return new Node(val);
+      if (val < root.val) root.left = insert(root.left, val);
+      else if (val > root.val) root.right = insert(root.right, val);
+      return root;
+    }
+
+    function search(root, val) {
+      if (!root) return false;
+      if (root.val === val) return true;
+      if (val < root.val) return search(root.left, val);
+      return search(root.right, val);
+    }
+
+    function deleteNode(root, val) {
+      if (!root) return null;
+      if (val < root.val) root.left = deleteNode(root.left, val);
+      else if (val > root.val) root.right = deleteNode(root.right, val);
+      else {
+        if (!root.left) return root.right;
+        if (!root.right) return root.left;
+        let minNode = root.right;
+        while (minNode.left) minNode = minNode.left;
+        root.val = minNode.val;
+        root.right = deleteNode(root.right, minNode.val);
+      }
+      return root;
+    }
+
+    function setOperation(op) {
+      currentOp = op;
+    }
+
+    function performOperation() {
+      let val = parseInt(document.getElementById("valueInput").value);
+      if (isNaN(val)) return;
+      if (currentOp === "insert") root = insert(root, val);
+      if (currentOp === "delete") root = deleteNode(root, val);
+      if (currentOp === "search") {
+        alert(search(root, val) ? "Found!" : "Not found!");
+      }
+      drawTree();
+    }
+
+    function buildSampleTree() {
+      root = null;
+      let values = [50, 30, 70, 20, 40, 60, 80];
+      values.forEach(v => root = insert(root, v));
+      drawTree();
+    }
+
+    function drawTree() {
+      const container = document.getElementById("tree-container");
+      container.innerHTML = "";
+      if (!root) return;
+
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("width", "800");
+      svg.setAttribute("height", "400");
+
+      function drawNode(node, x, y, offset) {
+        if (!node) return;
+        if (node.left) {
+          svg.appendChild(makeLine(x, y, x - offset, y + 70));
+          drawNode(node.left, x - offset, y + 70, offset / 1.5);
+        }
+        if (node.right) {
+          svg.appendChild(makeLine(x, y, x + offset, y + 70));
+          drawNode(node.right, x + offset, y + 70, offset / 1.5);
+        }
+        svg.appendChild(makeCircle(x, y, node.val));
+      }
+
+      function makeCircle(x, y, textVal) {
+        let g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", x);
+        circle.setAttribute("cy", y);
+        circle.setAttribute("r", 20);
+        g.appendChild(circle);
+        let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", x);
+        text.setAttribute("y", y + 5);
+        text.setAttribute("text-anchor", "middle");
+        text.textContent = textVal;
+        g.appendChild(text);
+        return g;
+      }
+
+      function makeLine(x1, y1, x2, y2) {
+        let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", x1);
+        line.setAttribute("y1", y1);
+        line.setAttribute("x2", x2);
+        line.setAttribute("y2", y2);
+        return line;
+      }
+
+      drawNode(root, 400, 50, 150);
+      container.appendChild(svg);
+    }
+  </script>
+
+</body>
+</html>

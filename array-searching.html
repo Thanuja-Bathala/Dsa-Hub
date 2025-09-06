@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Array Searching</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:pink;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #d63384;
+    color: white;
+    padding: 10px 20px;
+}
+.navbar .logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+}
+.logo a{
+    text-decoration: none;
+    color: white;
+    
+}
+
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #d63384;
+    }
+
+    .array-boxes {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .box {
+      width: 50px;
+      height: 50px;
+      background: #fff;
+      border: 2px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: all 0.4s ease;
+    }
+
+    .highlight {
+      background: #ffeb3b;
+      border-color: #f39c12;
+      transform: scale(1.1);
+    }
+
+    .found {
+      background: #4caf50;
+      color: #fff;
+      border-color: #388e3c;
+      transform: scale(1.2);
+    }
+
+    .controls {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .linear { background: #007bff; color: #fff; }
+    .binary { background: #6f42c1; color: #fff; }
+    .reset { background: #6c757d; color: #fff; }
+
+    .info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .card {
+      flex: 1;
+      min-width: 250px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    }
+
+    pre {
+      background: #111;
+      color: #0f0;
+      padding: 15px;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+
+    @media (max-width: 768px) {
+      .array-boxes { gap: 6px; }
+      .box { width: 40px; height: 40px; }
+    }
+  </style>
+</head>
+<body>
+ <div id="navbar"></div>
+<script>
+  fetch("navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+</script>
+
+  <div class="container">
+    <h2>🔍 Array Searching</h2>
+    <p>Learn Linear Search and Binary Search with animations.</p>
+
+    <div class="array-boxes" id="arrayContainer"></div>
+
+    <div class="controls">
+      <input type="number" id="target" placeholder="Enter value to search"/>
+      <button class="linear" onclick="startLinearSearch()">Linear Search</button>
+      <button class="binary" onclick="startBinarySearch()">Binary Search</button>
+      <button class="reset" onclick="resetArray()">Reset</button>
+    </div>
+
+    <div class="info">
+      <div class="card">
+        <h3>📘 Linear Search</h3>
+        <p>Checks each element one by one until it finds the target.</p>
+        <p><b>Time Complexity:</b> O(n)</p>
+        <p><b>Space Complexity:</b> O(1)</p>
+        <pre>
+function linearSearch(arr, target) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === target) return i;
+  }
+  return -1;
+}
+        </pre>
+      </div>
+      <div class="card">
+        <h3>📗 Binary Search</h3>
+        <p>Divides array into halves, works only on sorted arrays.</p>
+        <p><b>Time Complexity:</b> O(log n)</p>
+        <p><b>Space Complexity:</b> O(1)</p>
+        <pre>
+function binarySearch(arr, target) {
+  let left = 0, right = arr.length - 1;
+  while (left <= right) {
+    let mid = Math.floor((left + right) / 2);
+    if (arr[mid] === target) return mid;
+    else if (arr[mid] < target) left = mid + 1;
+    else right = mid - 1;
+  }
+  return -1;
+}
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let arr = [5, 12, 23, 35, 47, 56, 68, 79, 89, 95];
+    let container = document.getElementById("arrayContainer");
+
+    function renderArray() {
+      container.innerHTML = "";
+      arr.forEach((num, i) => {
+        let div = document.createElement("div");
+        div.className = "box";
+        div.id = "box-" + i;
+        div.innerText = num;
+        container.appendChild(div);
+      });
+    }
+
+    function resetArray() {
+      renderArray();
+    }
+
+    async function startLinearSearch() {
+      let target = parseInt(document.getElementById("target").value);
+      resetArray();
+      for (let i = 0; i < arr.length; i++) {
+        let box = document.getElementById("box-" + i);
+        box.classList.add("highlight");
+        await new Promise(r => setTimeout(r, 700));
+        if (arr[i] === target) {
+          box.classList.remove("highlight");
+          box.classList.add("found");
+          return;
+        }
+        box.classList.remove("highlight");
+      }
+      alert("Not found!");
+    }
+
+    async function startBinarySearch() {
+      let target = parseInt(document.getElementById("target").value);
+      resetArray();
+      let left = 0, right = arr.length - 1;
+      while (left <= right) {
+        let mid = Math.floor((left + right) / 2);
+        let box = document.getElementById("box-" + mid);
+        box.classList.add("highlight");
+        await new Promise(r => setTimeout(r, 700));
+        if (arr[mid] === target) {
+          box.classList.remove("highlight");
+          box.classList.add("found");
+          return;
+        } else if (arr[mid] < target) {
+          left = mid + 1;
+        } else {
+          right = mid - 1;
+        }
+        box.classList.remove("highlight");
+      }
+      alert("Not found!");
+    }
+
+    renderArray();
+  </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linked List Operations</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff0f6;
+      color: #333;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #d63384;
+      color: white;
+      padding: 12px 20px;
+    }
+    .navbar .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
+    .nav-links li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .logo a {
+      text-decoration: none;
+      color: white;
+    }
+
+    /* Content */
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #d63384;
+    }
+
+    .linkedlist {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+    .node {
+      padding: 15px 25px;
+      background: #ffb3d9;
+      border: 2px solid #d63384;
+      border-radius: 8px;
+      position: relative;
+      transition: transform 0.4s ease;
+    }
+    .arrow {
+      font-size: 20px;
+      color: #d63384;
+    }
+
+    .operations {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .operations input {
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .operations button {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      background: #d63384;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .operations button:hover {
+      background: #a61e4d;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffcc;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+
+    .explanation {
+      background: #fff5fa;
+      padding: 15px;
+      border-left: 5px solid #d63384;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+<div id="navbar"></div>
+<script>
+  fetch("navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+</script>
+
+
+  <!-- Content -->
+  <div class="container">
+    <h1>Linked List Operations</h1>
+
+    <!-- Linked List Display -->
+    <div class="linkedlist" id="list">
+      <div class="node">10</div>
+      <span class="arrow">➡</span>
+      <div class="node">20</div>
+      <span class="arrow">➡</span>
+      <div class="node">30</div>
+    </div>
+
+    <!-- Operations -->
+    <div class="operations">
+      <input type="number" id="inputValue" placeholder="Enter value">
+      <button onclick="insertHead()">Insert Head</button>
+      <button onclick="insertTail()">Insert Tail</button>
+      <button onclick="deleteHead()">Delete Head</button>
+    </div>
+
+    <!-- Code Example -->
+    <h2>Example Code</h2>
+    <pre>
+// Insert at Head
+function insertHead(value) {
+   let newNode = {data: value, next: head};
+   head = newNode;
+}
+    </pre>
+
+    <!-- Extra Explanation -->
+    <div class="explanation">
+      <h3>📘 Explanation of Operations</h3>
+      <p><b>Insert Head:</b> Adds a new node at the beginning of the linked list. This operation changes the head pointer to point to the newly created node.</p>
+      <p><b>Insert Tail:</b> Adds a new node at the end of the linked list. The last node’s <code>next</code> pointer will now point to this new node.</p>
+      <p><b>Delete Head:</b> Removes the first node of the linked list. The head pointer is updated to point to the next node in the list.</p>
+      <p>👉 Linked lists are useful because they allow efficient insertion and deletion of nodes, unlike arrays where shifting elements is required.</p>
+    </div>
+  </div>
+
+  <script>
+    const list = document.getElementById("list");
+    const input = document.getElementById("inputValue");
+
+    function insertHead() {
+      if (!input.value) return;
+      const newNode = document.createElement("div");
+      newNode.className = "node";
+      newNode.innerText = input.value;
+      list.prepend(newNode);
+      const arrow = document.createElement("span");
+      arrow.className = "arrow";
+      arrow.innerText = "➡";
+      list.insertBefore(arrow, newNode.nextSibling);
+      input.value = "";
+    }
+
+    function insertTail() {
+      if (!input.value) return;
+      const newNode = document.createElement("div");
+      newNode.className = "node";
+      newNode.innerText = input.value;
+      const arrow = document.createElement("span");
+      arrow.className = "arrow";
+      arrow.innerText = "➡";
+      list.appendChild(arrow);
+      list.appendChild(newNode);
+      input.value = "";
+    }
+
+    function deleteHead() {
+      if (list.children.length > 0) {
+        list.removeChild(list.children[0]); // remove first node
+        if (list.children[0]?.classList.contains("arrow")) {
+          list.removeChild(list.children[0]); // remove arrow after head
+        }
+      }
+    }
+  </script>
+</body>
+</html>

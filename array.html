@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Hub</title>
+    <style>body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #fff0f5;
+}
+
+/* Navigation */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #d63384;
+    color: white;
+    padding: 10px 20px;
+}
+.navbar .logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+}
+
+/* Layout */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+.sidebar {
+    flex: 1 1 200px;
+    background: #ffe4ef;
+    padding: 20px;
+}
+.sidebar h2 {
+    color: #b03060;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+.sidebar ul li {
+    padding: 8px;
+    cursor: pointer;
+    color: #b03060;
+}
+.sidebar ul li.active, .sidebar ul li:hover {
+    background: #f8c8dc;
+    border-radius: 5px;
+}
+
+.content {
+    flex: 3;
+    padding: 20px;
+}
+
+/* Array Animation */
+#array-container {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+}
+.array-box {
+    padding: 15px;
+    background: pink;
+    border-radius: 8px;
+    text-align: center;
+    transition: 0.5s;
+}
+.array-box.active {
+    background: hotpink;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Buttons */
+.controls {
+    margin: 10px 0;
+}
+.controls button {
+    background: #d63384;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    margin-right: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Features */
+.features {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+.feature-box {
+    background: #ffe4ef;
+    padding: 10px;
+    border-radius: 8px;
+    flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+}
+.logo a{
+    text-decoration: none;
+    color: white;
+    
+}
+pre {
+    background-color: black;
+    color: #00ff00; /* bright green */
+    padding: 10px;
+    border-radius: 5px;
+    font-family: monospace;
+    width: 250px;
+}
+
+</style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+<div id="navbar"></div>
+<script>
+  fetch("navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+</script>
+
+ <!-- Main Content -->
+        <main class="content">
+            <h1>Array Basics</h1>
+            <p>An array is a collection of elements stored at contiguous memory locations. It’s one of the most fundamental data structures in computer science.</p>
+
+            <h3>Visual Representation:</h3>
+            <div id="array-container"></div>
+            <div class="controls">
+                <button onclick="prevStep()">Previous</button>
+                <button onclick="nextStep()">Next</button>
+            </div>
+
+            <h3>Key Features:</h3>
+            <div class="features">
+                <div class="feature-box">
+                    <strong>O(1) Access Time</strong>
+                    <p>Direct access using index</p>
+                </div>
+                <div class="feature-box">
+                    <strong>Fixed Size</strong>
+                    <p>Size is set at creation</p>
+                </div>
+            </div>
+
+            <h3>Code Example:</h3>
+<pre class="Code">
+int arr[5] = {10, 20, 30, 40, 50};
+printf("%d", arr[2]);
+// Output: 30
+</pre>
+        </main>
+    </div>
+
+<script>
+    const arrayData = [10, 20, 30, 40, 50];
+let currentIndex = -1;
+
+function renderArray() {
+    const container = document.getElementById("array-container");
+    container.innerHTML = "";
+    arrayData.forEach((num, index) => {
+        const box = document.createElement("div");
+        box.className = "array-box";
+        if (index === currentIndex) box.classList.add("active");
+        box.innerHTML = `<small>Index ${index}</small><br>${num}`;
+        container.appendChild(box);
+    });
+}
+
+function nextStep() {
+    if (currentIndex < arrayData.length - 1) {
+        currentIndex++;
+        renderArray();
+    }
+}
+
+function prevStep() {
+    if (currentIndex > -1) {
+        currentIndex--;
+        renderArray();
+    }
+}
+
+// Initial render
+renderArray();
+
+</script>
+</body>
+</html>

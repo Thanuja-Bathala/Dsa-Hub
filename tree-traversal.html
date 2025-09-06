@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DSA Hub - Tree Traversals</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ff69b4;
+      padding: 15px 30px;
+    }
+    .navbar .logo a {
+      color: white;
+      font-size: 22px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .navbar .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar .nav-links li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    .navbar .nav-links li a:hover {
+      color: #222;
+    }
+
+    header {
+      text-align: center;
+      font-size: 26px;
+      padding: 20px;
+      color: #d63384;
+    }
+
+    /* Tree Section */
+    .controls {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .controls button {
+      background: #ff4da6;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+    .controls button:hover {
+      background: #d63384;
+    }
+
+    .tree-container {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+    .node {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border: 2px solid #d63384;
+      border-radius: 50%;
+      line-height: 50px;
+      text-align: center;
+      margin: 10px;
+      font-weight: bold;
+      background: white;
+      transition: background 0.5s, color 0.5s;
+    }
+    .highlight {
+      background: #d63384;
+      color: white;
+    }
+    .sequence-box {
+      background: #fff0f6;
+      border: 2px solid #ff4da6;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 20px auto;
+      width: 60%;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    /* Traversal Cards */
+    .container {
+      width: 90%;
+      margin: 20px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    }
+    .card h3 { margin-top: 0; }
+    .inorder { border-left: 6px solid green; }
+    .preorder { border-left: 6px solid blue; }
+    .postorder { border-left: 6px solid purple; }
+    .levelorder { border-left: 6px solid red; }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ff88;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+
+    /* Complexity */
+    .analysis {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px auto;
+      max-width: 700px;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    }
+    .analysis div {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+<div id="navbar"></div>
+<script>
+  fetch("navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+</script>
+
+
+  <!-- Header -->
+  <header>
+    🌳 Binary Tree Traversals Visualization
+  </header>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button onclick="setTraversal('inorder')">Inorder</button>
+    <button onclick="setTraversal('preorder')">Preorder</button>
+    <button onclick="setTraversal('postorder')">Postorder</button>
+    <button onclick="setTraversal('levelorder')">Level Order</button>
+    <button onclick="startTraversal()">▶ Start Traversal</button>
+  </div>
+
+  <!-- Tree -->
+  <div class="tree-container">
+    <div class="node" id="A">A</div>
+  </div>
+  <div class="tree-container">
+    <div class="node" id="B">B</div>
+    <div class="node" id="C">C</div>
+  </div>
+  <div class="tree-container">
+    <div class="node" id="D">D</div>
+    <div class="node" id="E">E</div>
+    <div class="node" id="F">F</div>
+    <div class="node" id="G">G</div>
+  </div>
+
+  <div class="sequence-box" id="sequence">Traversal Sequence: </div>
+
+  <!-- Traversal Explanation Cards -->
+  <div class="container">
+    <div class="card inorder">
+      <h3>Inorder Traversal</h3>
+      <ol>
+        <li>Visit left subtree</li>
+        <li>Visit root node</li>
+        <li>Visit right subtree</li>
+      </ol>
+      <p><b>Result:</b> D, B, E, A, F, C, G</p>
+    </div>
+    <div class="card preorder">
+      <h3>Preorder Traversal</h3>
+      <ol>
+        <li>Visit root node</li>
+        <li>Visit left subtree</li>
+        <li>Visit right subtree</li>
+      </ol>
+      <p><b>Result:</b> A, B, D, E, C, F, G</p>
+    </div>
+    <div class="card postorder">
+      <h3>Postorder Traversal</h3>
+      <ol>
+        <li>Visit left subtree</li>
+        <li>Visit right subtree</li>
+        <li>Visit root node</li>
+      </ol>
+      <p><b>Result:</b> D, E, B, F, G, C, A</p>
+    </div>
+    <div class="card levelorder">
+      <h3>Level Order Traversal</h3>
+      <ol>
+        <li>Visit nodes level by level</li>
+        <li>Use queue for implementation</li>
+      </ol>
+      <p><b>Result:</b> A, B, C, D, E, F, G</p>
+    </div>
+  </div>
+
+  <!-- Code Implementation -->
+  <div class="card" style="max-width:700px; margin:20px auto;">
+    <h3>Preorder Traversal Implementation</h3>
+    <pre>
+function preorderTraversal(node) {
+  if (node === null) return;
+
+  console.log(node.data);        // Visit root
+  preorderTraversal(node.left);  // Visit left subtree
+  preorderTraversal(node.right); // Visit right subtree
+}
+    </pre>
+  </div>
+
+  <!-- Complexity -->
+  <div class="analysis">
+    <div>
+      <h4>Time Complexity</h4>
+      <p>O(n)</p>
+    </div>
+    <div>
+      <h4>Space Complexity</h4>
+      <p>O(h) (h = tree height)</p>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    // Tree structure
+    const tree = {
+      A: { left: "B", right: "C" },
+      B: { left: "D", right: "E" },
+      C: { left: "F", right: "G" },
+      D: { left: null, right: null },
+      E: { left: null, right: null },
+      F: { left: null, right: null },
+      G: { left: null, right: null }
+    };
+
+    let traversalType = "inorder";
+    let order = [];
+
+    function setTraversal(type) {
+      traversalType = type;
+      document.getElementById("sequence").innerText = "Traversal Sequence: ";
+      document.querySelectorAll(".node").forEach(n => n.classList.remove("highlight"));
+    }
+
+    function inorder(node, result) {
+      if (!node) return;
+      inorder(tree[node].left, result);
+      result.push(node);
+      inorder(tree[node].right, result);
+    }
+    function preorder(node, result) {
+      if (!node) return;
+      result.push(node);
+      preorder(tree[node].left, result);
+      preorder(tree[node].right, result);
+    }
+    function postorder(node, result) {
+      if (!node) return;
+      postorder(tree[node].left, result);
+      postorder(tree[node].right, result);
+      result.push(node);
+    }
+    function levelorder(start, result) {
+      let queue = [start];
+      while (queue.length) {
+        let node = queue.shift();
+        result.push(node);
+        if (tree[node].left) queue.push(tree[node].left);
+        if (tree[node].right) queue.push(tree[node].right);
+      }
+    }
+
+    function startTraversal() {
+      order = [];
+      if (traversalType === "inorder") inorder("A", order);
+      if (traversalType === "preorder") preorder("A", order);
+      if (traversalType === "postorder") postorder("A", order);
+      if (traversalType === "levelorder") levelorder("A", order);
+
+      document.querySelectorAll(".node").forEach(n => n.classList.remove("highlight"));
+      let seqBox = document.getElementById("sequence");
+      seqBox.innerText = "Traversal Sequence: ";
+
+      let i = 0;
+      function highlightStep() {
+        if (i < order.length) {
+          let node = document.getElementById(order[i]);
+          node.classList.add("highlight");
+          seqBox.innerText += order[i] + " ";
+          i++;
+          setTimeout(highlightStep, 1000);
+        }
+      }
+      highlightStep();
+    }
+  </script>
+
+</body>
+</html>

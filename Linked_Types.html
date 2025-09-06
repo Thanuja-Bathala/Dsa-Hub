@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive Linked List Visualizer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f8f9fa;
+      color: #333;
+    }
+     /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #d63384;
+      color: white;
+      padding: 12px 20px;
+    }
+    .navbar .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
+    .nav-links li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .logo a {
+      text-decoration: none;
+      color: white;
+    }
+    h1 { text-align: center; color: pink; }
+    .tabs { display: flex; justify-content: center; margin-bottom: 20px; }
+    .tab { padding: 10px 20px; margin: 0 5px; cursor: pointer; border-radius: 6px; background: #e1bee7; }
+    .tab.active { background:  #b91c5c; color: #fff; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .controls { margin: 10px 0; }
+    input, button { padding: 5px 10px; margin: 5px; border-radius: 6px; border: 1px solid #ccc; }
+    button { background: #b91c5c; color: white; cursor: pointer; }
+    button:hover { background:  #b91c5c; }
+    .list-display { margin: 20px 0; padding: 10px; border: 2px dashed  #b91c5c; min-height: 50px; display: flex; flex-wrap: wrap; align-items: center; }
+    .node { padding: 10px; background:  #b91c5c; color: white; border-radius: 8px; margin: 5px; position: relative; }
+    .arrow::after { content: "→"; margin-left: 10px; font-weight: bold; }
+    .arrow-double::before { content: "←"; margin-right: 10px; font-weight: bold; }
+    .circular::after { content: "⟲"; margin-left: 10px; font-weight: bold; }
+    .info-box { background: #fff; border-radius: 8px; padding: 15px; margin: 20px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background:  #b91c5c; color: #fff; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+<div id="navbar"></div>
+<script>
+  fetch("navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    });
+</script>
+
+
+<h1>Interactive Linked List Visualizer</h1>
+
+<div class="tabs">
+  <div class="tab active" onclick="showSection('singly')">Singly</div>
+  <div class="tab" onclick="showSection('doubly')">Doubly</div>
+  <div class="tab" onclick="showSection('circular')">Circular</div>
+</div>
+
+<!-- Singly Linked List -->
+<div id="singly" class="section active">
+  <h2>Singly Linked List</h2>
+  <div class="controls">
+    <input type="number" id="singlyInput" placeholder="Enter value">
+    <button onclick="insertSingly()">Insert</button>
+    <button onclick="deleteSingly()">Delete</button>
+    <button onclick="searchSingly()">Search</button>
+  </div>
+  <div id="singlyDisplay" class="list-display"></div>
+  <div class="info-box">
+    <h3>Explanation</h3>
+    <p>Singly Linked List consists of nodes where each node has data and a pointer to the next node. Last node points to NULL.</p>
+    <p><b>Time Complexity:</b> Access: O(n), Search: O(n), Insertion: O(1)*, Deletion: O(1)* (*at known position)</p>
+    <p><b>Advantages:</b> Dynamic size, efficient insertion/deletion.</p>
+    <p><b>Disadvantages:</b> No backward traversal, extra memory for pointers.</p>
+  </div>
+</div>
+
+<!-- Doubly Linked List -->
+<div id="doubly" class="section">
+  <h2>Doubly Linked List</h2>
+  <div class="controls">
+    <input type="number" id="doublyInput" placeholder="Enter value">
+    <button onclick="insertDoubly()">Insert</button>
+    <button onclick="deleteDoubly()">Delete</button>
+    <button onclick="searchDoubly()">Search</button>
+  </div>
+  <div id="doublyDisplay" class="list-display"></div>
+  <div class="info-box">
+    <h3>Explanation</h3>
+    <p>Doubly Linked List has nodes with three fields: prev pointer, data, and next pointer. Allows traversal both ways.</p>
+    <p><b>Time Complexity:</b> Access: O(n), Search: O(n), Insertion: O(1)*, Deletion: O(1)*</p>
+    <p><b>Advantages:</b> Traversal in both directions, easier deletion.</p>
+    <p><b>Disadvantages:</b> More memory usage, more complex implementation.</p>
+  </div>
+</div>
+
+<!-- Circular Linked List -->
+<div id="circular" class="section">
+  <h2>Circular Linked List</h2>
+  <div class="controls">
+    <input type="number" id="circularInput" placeholder="Enter value">
+    <button onclick="insertCircular()">Insert</button>
+    <button onclick="deleteCircular()">Delete</button>
+    <button onclick="searchCircular()">Search</button>
+  </div>
+  <div id="circularDisplay" class="list-display"></div>
+  <div class="info-box">
+    <h3>Explanation</h3>
+    <p>In Circular Linked List, the last node connects back to the first node forming a circle.</p>
+    <p><b>Time Complexity:</b> Access: O(n), Search: O(n), Insertion: O(1)*, Deletion: O(1)*</p>
+    <p><b>Advantages:</b> Can be traversed endlessly, efficient memory use.</p>
+    <p><b>Disadvantages:</b> Complex implementation, prone to infinite loops if not careful.</p>
+  </div>
+</div>
+
+<!-- Comparison Table -->
+<div class="info-box">
+  <h2>Comparison of Linked List Types</h2>
+  <table>
+    <tr>
+      <th>Type</th>
+      <th>Traversal</th>
+      <th>Memory</th>
+      <th>Use Case</th>
+    </tr>
+    <tr>
+      <td>Singly</td>
+      <td>Forward only</td>
+      <td>Low</td>
+      <td>Simple dynamic data</td>
+    </tr>
+    <tr>
+      <td>Doubly</td>
+      <td>Forward & Backward</td>
+      <td>High</td>
+      <td>Undo operations, complex data</td>
+    </tr>
+    <tr>
+      <td>Circular</td>
+      <td>Forward / Both</td>
+      <td>Moderate</td>
+      <td>Round-robin scheduling</td>
+    </tr>
+  </table>
+</div>
+
+<script>
+  // Tab switching
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelector(`.tab[onclick="showSection('${id}')"]`).classList.add('active');
+  }
+
+  // Singly Linked List
+  let singly = [];
+  function renderSingly() {
+    let display = document.getElementById("singlyDisplay");
+    display.innerHTML = "";
+    singly.forEach((val, i) => {
+      let node = document.createElement("div");
+      node.className = "node arrow";
+      node.textContent = val;
+      if(i === singly.length-1) node.classList.remove("arrow");
+      display.appendChild(node);
+    });
+  }
+  function insertSingly() { let val=document.getElementById("singlyInput").value; if(val){ singly.push(val); renderSingly(); } }
+  function deleteSingly() { singly.pop(); renderSingly(); }
+  function searchSingly() { let val=document.getElementById("singlyInput").value; alert(singly.includes(val)? "Found":"Not Found"); }
+
+  // Doubly Linked List
+  let doubly = [];
+  function renderDoubly() {
+    let display = document.getElementById("doublyDisplay");
+    display.innerHTML = "";
+    doubly.forEach((val, i) => {
+      let node = document.createElement("div");
+      node.className = "node arrow-double arrow";
+      node.textContent = val;
+      if(i === 0) node.classList.remove("arrow-double");
+      if(i === doubly.length-1) node.classList.remove("arrow");
+      display.appendChild(node);
+    });
+  }
+  function insertDoubly() { let val=document.getElementById("doublyInput").value; if(val){ doubly.push(val); renderDoubly(); } }
+  function deleteDoubly() { doubly.pop(); renderDoubly(); }
+  function searchDoubly() { let val=document.getElementById("doublyInput").value; alert(doubly.includes(val)? "Found":"Not Found"); }
+
+  // Circular Linked List
+  let circular = [];
+  function renderCircular() {
+    let display = document.getElementById("circularDisplay");
+    display.innerHTML = "";
+    circular.forEach((val, i) => {
+      let node = document.createElement("div");
+      node.className = "node arrow";
+      node.textContent = val;
+      display.appendChild(node);
+    });
+    if(circular.length>0) display.lastChild.className = "node circular";
+  }
+  function insertCircular() { let val=document.getElementById("circularInput").value; if(val){ circular.push(val); renderCircular(); } }
+  function deleteCircular() { circular.pop(); renderCircular(); }
+  function searchCircular() { let val=document.getElementById("circularInput").value; alert(circular.includes(val)? "Found":"Not Found"); }
+</script>
+
+</body>
+</html>
