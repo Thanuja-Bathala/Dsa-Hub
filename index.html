@@ -7,68 +7,81 @@
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+<!-- Navbar -->
 <div id="navbar"></div>
 <script>
   fetch("navbar.html")
     .then(response => response.text())
     .then(data => {
       document.getElementById("navbar").innerHTML = data;
+
+      // Enable menu toggle after navbar loads
+      const menuToggle = document.querySelector(".menu-toggle");
+      const navLinks = document.querySelector("nav ul");
+
+      if (menuToggle) {
+        menuToggle.addEventListener("click", () => {
+          navLinks.classList.toggle("show");
+        });
+      }
     });
 </script>
 
+<!-- Hero Section -->
 <section class="hero">
-    <h1>Master Data Structures & Algorithms</h1>
-    <p>Learn DSA concepts with interactive examples, animations, and easy-to-understand explanations. Perfect for beginners and professionals alike.</p>
-    <button class="btn-primary">Start Learning</button>
-    <button class="btn-outline">View Examples</button>
+  <h1>Master Data Structures & Algorithms</h1>
+  <p>Learn DSA concepts with interactive examples, animations, and easy-to-understand explanations. Perfect for beginners and professionals alike.</p>
+  <button class="btn-primary">Start Learning</button>
+  <button class="btn-outline">View Examples</button>
 </section>
 
 <!-- Sidebar + Content -->
 <section class="main-content">
-    <aside class="sidebar">
-        <h3>DSA Topics</h3>
+  <aside class="sidebar">
+    <h3>DSA Topics</h3>
 
-        <div class="topic">Arrays</div>
-        <ul>
-            <li><a href="./array.html" onclick="return checkLogin()">Array Basics</a></li>
-            <li><a href="./array-operations.html" onclick="return checkLogin()">Array Operations</a></li>
-            <li><a href="./array-searching.html" onclick="return checkLogin()">Array Searching</a></li>
-            <li><a href="./array-sorting.html" onclick="return checkLogin()">Array Sorting</a></li>
-        </ul>
+    <div class="topic">Arrays</div>
+    <ul>
+      <li><a href="./array.html" onclick="return checkLogin()">Array Basics</a></li>
+      <li><a href="./array-operations.html" onclick="return checkLogin()">Array Operations</a></li>
+      <li><a href="./array-searching.html" onclick="return checkLogin()">Array Searching</a></li>
+      <li><a href="./array-sorting.html" onclick="return checkLogin()">Array Sorting</a></li>
+    </ul>
 
-        <div class="topic">Linked Lists</div>
-        <ul>
-            <li><a href="./linkedlist.html" onclick="return checkLogin()">LinkedList</a></li>
-            <li><a href="./linked_operations.html" onclick="return checkLogin()">LinkedList Operations</a></li>
-            <li><a href="./Linked_Types.html" onclick="return checkLogin()">Types Of LinkedList</a></li>
-        </ul>
+    <div class="topic">Linked Lists</div>
+    <ul>
+      <li><a href="./linkedlist.html" onclick="return checkLogin()">LinkedList</a></li>
+      <li><a href="./linked_operations.html" onclick="return checkLogin()">LinkedList Operations</a></li>
+      <li><a href="./Linked_Types.html" onclick="return checkLogin()">Types Of LinkedList</a></li>
+    </ul>
 
-        <div class="topic">Stacks & Queues</div>
-        <ul>
-            <li><a href="./stack.html" onclick="return checkLogin()">Stacks</a></li>
-            <li><a href="./Queue.html" onclick="return checkLogin()">Queues</a></li>
-        </ul>
+    <div class="topic">Stacks & Queues</div>
+    <ul>
+      <li><a href="./stack.html" onclick="return checkLogin()">Stacks</a></li>
+      <li><a href="./Queue.html" onclick="return checkLogin()">Queues</a></li>
+    </ul>
 
-        <div class="topic">Trees</div>
-        <ul>
-            <li><a href="./tree.html" onclick="return checkLogin()">Tree</a></li>
-            <li><a href="./tree-traversal.html" onclick="return checkLogin()">Tree Traversal</a></li>
-            <li><a href="./Binary-search.html" onclick="return checkLogin()">Binary Search Tree</a></li>
-        </ul>
+    <div class="topic">Trees</div>
+    <ul>
+      <li><a href="./tree.html" onclick="return checkLogin()">Tree</a></li>
+      <li><a href="./tree-traversal.html" onclick="return checkLogin()">Tree Traversal</a></li>
+      <li><a href="./Binary-search.html" onclick="return checkLogin()">Binary Search Tree</a></li>
+    </ul>
 
-        <div class="topic">Graphs</div>
-        <ul>
-            <li><a href="./graphs.html" onclick="return checkLogin()">Graph Basics</a></li>
-            <li><a href="./graph_travesal.html" onclick="return checkLogin()">Graph Traversals</a></li>
-        </ul>
-    </aside>
+    <div class="topic">Graphs</div>
+    <ul>
+      <li><a href="./graphs.html" onclick="return checkLogin()">Graph Basics</a></li>
+      <li><a href="./graph_travesal.html" onclick="return checkLogin()">Graph Traversals</a></li>
+    </ul>
+  </aside>
 
-    <div class="content-area">
-        <img src="./light.jpg" alt="DSA Banner">
+  <div class="content-area">
+    <img src="./light.jpg" alt="DSA Banner">
+<h2 style="color: #82133a; text-align: center;">
+  Learn Data Structures and Algorithms
+</h2>
 
-        <h2 style="color: #82133a;">Learn Data Structures and Algorithms</h2>
-
-        <pre style="font-family: Arial, Helvetica, sans-serif;font-size: 20px;">
+<div style="white-space: pre-wrap; word-wrap: break-word; font-size: 16px; line-height: 1.6; padding: 10px;">
 Data Structures and Algorithms (DSA) is a fundamental part of Computer Science that
 teaches you how to think and solve complex problems systematically.
 
@@ -76,8 +89,8 @@ Using the right data structure and algorithm makes your program run faster,
 especially when working with lots of data.
 
 Knowing DSA can help you perform better in job interviews and land great jobs in tech companies.
-        </pre>
-    </div>
+</div>
+
 </section>
 
 <!-- Footer Section -->
@@ -99,23 +112,14 @@ Knowing DSA can help you perform better in job interviews and land great jobs in
 </footer>
 
 <script>
-    // Sidebar toggle (if needed)
-    const menuToggle = document.getElementById('menu-toggle');
-    const menu = document.getElementById('menu');
-    if(menuToggle){
-        menuToggle.addEventListener('click', () => {
-            menu.classList.toggle('show');
-        });
+  // 🔑 Login Check Function
+  function checkLogin() {
+    if(localStorage.getItem("loggedIn") !== "true") {
+      window.location.href = "login.html";
+      return false; // stop direct navigation
     }
-
-    // 🔑 Login Check Function
-    function checkLogin() {
-      if(localStorage.getItem("loggedIn") !== "true") {
-        window.location.href = "login.html";
-        return false; // stop direct navigation
-      }
-      return true;
-    }
+    return true;
+  }
 </script>
 </body>
 </html>
